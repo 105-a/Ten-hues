@@ -1974,7 +1974,7 @@ VOL. 01 / 2026
 <div><strong>Work</strong><span id="aboutWork">デザイン / 文章 / サイト制作</span></div>
 <div><strong>Message</strong><span id="aboutMessage">ゆっくり見ていってください。</span></div>
 </div>
-<p class="about-open-note">左のカードをクリックすると、この紹介紙面だけが切り替わります。人数を増やしたいときは、左のカードと JavaScript の <code>people</code> に同じキーで追加すると増やせます。</p>
+<p class="about-open-note">制作に関わった人や、この紙面を支えてくれた人たちを紹介しています。記事とあわせて、十色の森をつくる人の雰囲気も感じてもらえたらうれしいです。</p>
 </article>
 </div>
 </section>
@@ -1988,27 +1988,27 @@ VOL. 01 / 2026
 <div class="modal-layout">
 <div>
 <div class="modal-photo" id="modalPhoto"></div>
-<div class="modal-columns" id="modalBody"><p>ここは紙面をクリックしたときに開く本文エリアです。本文は複数段落で入れると新聞らしく見えます。</p><p>目安は短めの記事なら250〜450字、しっかり読ませる記事なら500〜800字くらいです。長くする場合は段落を分けると読みやすくなります。</p><p>画像の下に本文が2段組で入るため、文章を詰めすぎず、100〜160字くらいで段落を切るのがおすすめです。</p></div>
+<div class="modal-columns" id="modalBody"><p>紙面を開くと、記事の本文がここに表示されます。各記事の内容に合わせて、読みやすい段落に整えています。</p><p>一覧では短く、開いた紙面では詳しく読めるようにしているため、気になる見出しから順番に読んでみてください。</p><p>地域創生学科の学びや学生の活動が、新聞の紙面のように少しずつ広がっていく構成です。</p></div>
 <section class="related">
 <h3>Related Papers</h3>
-<div class="related-mini"><div><strong>Title 2</strong>写真中心の記事</div><div><strong>Title 3</strong>体験紹介の記事</div><div><strong>Title 6</strong>まとめ・あとがき</div></div>
+<div class="related-mini"><div><strong>地域と出会う最初の一歩</strong>一年生のフィールドワーク</div><div><strong>教室を飛び出し、地域へ</strong>実践的な学科の魅力</div><div><strong>地域と学生を繋ぐ森</strong>十色の森の紹介</div></div>
 </section>
 </div>
 <aside class="modal-aside">
 <h3 class="aside-title" id="modalAside">記事の使い方メモ</h3>
-<p>紙面の横に置く小さなコラムです。プロフィール、制作日記、作品メモ、ニュース、店舗紹介などを入れると、新聞らしさが一気に増します。</p>
+<p>この記事で注目したいポイントをまとめています。本文とあわせて読むことで、授業や活動の背景、地域とのつながりがより分かりやすくなります。</p>
 <ul class="toc">
-<li><strong>01</strong><span>Main Story</span></li>
-<li><strong>02</strong><span>Photo Note</span></li>
-<li><strong>03</strong><span>Small Column</span></li>
-<li><strong>04</strong><span>Related Papers</span></li>
+<li><strong>01</strong><span>記事の概要</span></li>
+<li><strong>02</strong><span>活動の背景</span></li>
+<li><strong>03</strong><span>学びと気づき</span></li>
+<li><strong>04</strong><span>次につながる視点</span></li>
 </ul>
 <ul class="check-list">
-<li>大きな写真をひとつ置く</li>
-<li>見出しは細く上品にする</li>
-<li>文章量は詰めすぎない</li>
-<li>日付や号数で新聞感を出す</li>
-<li>余白を怖がらずに残す</li>
+<li>学生主体の活動に注目する</li>
+<li>地域との関わり方を見る</li>
+<li>現地で学ぶ意味を考える</li>
+<li>人とのつながりを読む</li>
+<li>十色の森全体の流れを感じる</li>
 </ul>
 </aside>
 </div>
@@ -2125,10 +2125,10 @@ VOL. 01 / 2026
       modalPhoto.style.backgroundImage = `url('${card.dataset.image}')`;
       if (modalBody && card.dataset.body) {
         modalBody.innerHTML = card.dataset.body
-          .split('。')
-          .map(sentence => sentence.trim())
+          .split(/\n\s*\n|\|\|/)
+          .map(paragraph => paragraph.trim())
           .filter(Boolean)
-          .map(sentence => `<p>${sentence}。</p>`)
+          .map(paragraph => `<p>${paragraph}</p>`)
           .join('');
       }
       modal.classList.add('is-open');
