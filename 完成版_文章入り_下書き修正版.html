@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Forest of Ten Hues - Editorial Newspaper Gallery</title>
+<style>
+    :root {
+      --paper: #e8e1d3;
+      --paper-light: #f4eee3;
+      --paper-mid: #dfd3c0;
+      --paper-dark: #cbbda8;
+      --ink: #25231f;
+      --ink-soft: #6c675e;
+      --ink-faint: rgba(37, 35, 31, 0.42);
+      --line: rgba(37, 35, 31, 0.26);
+      --line-soft: rgba(37, 35, 31, 0.14);
+      --shadow: rgba(26, 22, 18, 0.24);
+      --white: #faf7ef;
+      --accent: #7a5c3a;
+      --ease: cubic-bezier(.2,.8,.2,1);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Times New Roman", "Yu Mincho", "Hiragino Mincho ProN", "YuMincho", serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.72), transparent 34%),
+        radial-gradient(circle at 86% 18%, rgba(160, 139, 113, 0.24), transparent 32%),
+        linear-gradient(135deg, #ded3c0, #f5efe4 42%, #d8ccba);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.31;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(30, 24, 18, 0.05) 0 1px, transparent 1px 4px),
+        repeating-linear-gradient(90deg, rgba(30, 24, 18, 0.035) 0 1px, transparent 1px 5px);
+      mix-blend-mode: multiply;
+      z-index: 40;
+    }
+
+    body.clean-mode::before { opacity: 0.08; }
+    body.old-mode::before { opacity: 0.52; }
+    body.old-mode { filter: sepia(0.08) contrast(0.96); }
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      background: var(--paper-light);
+      animation: loaderOut 1.2s var(--ease) 1.2s forwards;
+    }
+
+    .loader-mark {
+      width: min(460px, 78vw);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 22px 0;
+      text-align: center;
+      letter-spacing: 0.22em;
+      color: var(--ink-soft);
+      font-size: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loader-mark strong {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(36px, 8vw, 82px);
+      letter-spacing: -0.06em;
+      font-weight: 400;
+      line-height: 0.9;
+      margin-bottom: 12px;
+    }
+
+    .loader-mark::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 2px;
+      width: 100%;
+      background: var(--ink);
+      transform: translateX(-100%);
+      animation: loadLine 1.1s var(--ease) forwards;
+    }
+
+    @keyframes loadLine { to { transform: translateX(0); } }
+    @keyframes loaderOut { to { opacity: 0; visibility: hidden; transform: scale(1.02); } }
+
+    .site-shell {
+      width: min(1500px, calc(100% - 36px));
+      margin: 0 auto;
+      padding: 26px 0 76px;
+    }
+
+    .ticker {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+      padding: 9px 0;
+      margin-bottom: 28px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+    }
+
+    .ticker-label {
+      flex: 0 0 auto;
+      color: var(--ink);
+    }
+
+    .ticker-track {
+      display: flex;
+      gap: 42px;
+      white-space: nowrap;
+      animation: tickerMove 34s linear infinite;
+    }
+
+    @keyframes tickerMove {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 32px;
+      align-items: end;
+      min-height: 420px;
+      padding: 88px 0 46px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(244,238,227,0.94) 0%, rgba(244,238,227,0.66) 42%, rgba(244,238,227,0.16) 100%),
+        linear-gradient(180deg, rgba(244,238,227,0.12), rgba(244,238,227,0.86)),
+        url('https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1900&q=80');
+      background-size: cover;
+      background-position: center 42%;
+      opacity: 0.76;
+      filter: grayscale(0.5) sepia(0.18) contrast(0.88);
+      z-index: -2;
+      transform: scale(1.04);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 24px 0 24px;
+      border-top: 1px solid rgba(37,35,31,0.18);
+      border-bottom: 1px solid rgba(37,35,31,0.18);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-kicker {
+      font-size: 12px;
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(58px, 9vw, 142px);
+      line-height: 0.86;
+      font-weight: 400;
+      letter-spacing: -0.07em;
+      max-width: 980px;
+    }
+
+    .hero-copy {
+      margin: 0;
+      max-width: 440px;
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--ink-soft);
+      writing-mode: vertical-rl;
+      justify-self: end;
+      max-height: 280px;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px;
+      align-items: center;
+      padding: 14px 0;
+      margin-bottom: 22px;
+      background: linear-gradient(180deg, rgba(232,225,211,0.96), rgba(232,225,211,0.82));
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .filters,
+    .modes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .tool-button,
+    .search-input {
+      border: 1px solid var(--line);
+      background: rgba(250,247,239,0.44);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 10px 13px;
+      min-height: 38px;
+    }
+
+    .tool-button {
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    }
+
+    .tool-button:hover,
+    .tool-button.active {
+      background: var(--ink);
+      color: var(--paper-light);
+      transform: translateY(-1px);
+    }
+
+    .search-input {
+      width: min(300px, 100%);
+      outline: none;
+      text-transform: none;
+      letter-spacing: 0.04em;
+      font-size: 13px;
+    }
+
+    .gallery-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 24px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      letter-spacing: 0.08em;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    .paper-card {
+      position: relative;
+      min-height: 570px;
+      padding: 22px;
+      border: 1px solid rgba(37, 35, 31, 0.18);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.34), transparent 36%),
+        var(--paper-light);
+      box-shadow: 0 20px 48px var(--shadow);
+      cursor: pointer;
+      overflow: hidden;
+      transition: transform 0.45s var(--ease), box-shadow 0.45s var(--ease), filter 0.45s ease, opacity .35s ease;
+      isolation: isolate;
+    }
+
+    .paper-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 10% 5%, rgba(255,255,255,0.35), transparent 22%),
+        repeating-linear-gradient(90deg, rgba(0,0,0,0.025) 0 1px, transparent 1px 7px);
+      opacity: 0.55;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .paper-card:hover {
+      transform: translateY(-10px) rotate(-0.35deg);
+      box-shadow: 0 34px 70px rgba(26, 22, 18, 0.31);
+      filter: contrast(1.03);
+    }
+
+    .paper-card.hidden {
+      display: none;
+    }
+
+    .paper-topline,
+    .paper-bottomline {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 7px 0;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .paper-title {
+      margin: 22px 0 12px;
+      font-size: clamp(34px, 4vw, 56px);
+      line-height: 0.92;
+      font-weight: 400;
+      letter-spacing: -0.045em;
+    }
+
+    .paper-subtitle {
+      margin: 0 0 20px;
+      font-size: 21px;
+      line-height: 1.55;
+      font-weight: 400;
+    }
+
+    .main-photo {
+      position: relative;
+      height: 210px;
+      margin: 16px 0;
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(0.45) sepia(0.23) contrast(0.86) brightness(0.98);
+      border: 1px solid rgba(37,35,31,0.16);
+      transition: filter 0.45s ease, transform 0.45s var(--ease);
+      overflow: hidden;
+    }
+
+    .paper-card:hover .main-photo {
+      filter: grayscale(0.26) sepia(0.12) contrast(0.95) brightness(1.05);
+      transform: scale(1.012);
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.78fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .article-grid p,
+    .paper-card p,
+    .modal-paper p {
+      font-size: 12px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .mini-photo {
+      min-height: 130px;
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(0.55) sepia(0.22) contrast(0.9);
+      border: 1px solid rgba(37,35,31,0.16);
+    }
+
+    .paper-bottomline {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 20px;
+    }
+
+    .paper-card.featured {
+      grid-column: span 2;
+      min-height: 630px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 28px;
+    }
+
+    .paper-card.featured .paper-title { font-size: clamp(54px, 7vw, 92px); }
+    .paper-card.featured .main-photo { height: 370px; margin-top: 0; }
+
+    .side-list { margin-top: 22px; border-top: 1px solid var(--line); }
+
+    .side-list div {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .side-list strong {
+      color: var(--ink);
+      font-weight: 400;
+      font-size: 20px;
+    }
+
+    .read-label {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      writing-mode: vertical-rl;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      color: rgba(37,35,31,0.42);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .paper-card:hover .read-label { opacity: 1; }
+
+    .scrap-button {
+      position: absolute;
+      top: 54px;
+      right: 18px;
+      z-index: 2;
+      border: 1px solid var(--line);
+      background: rgba(244,238,227,0.78);
+      color: var(--ink-soft);
+      font-family: inherit;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      padding: 7px 9px;
+      cursor: pointer;
+      transition: .25s ease;
+    }
+
+    .scrap-button:hover,
+    .scrap-button.saved {
+      background: var(--ink);
+      color: var(--paper-light);
+    }
+
+    .empty-state {
+      display: none;
+      padding: 80px 20px;
+      text-align: center;
+      border: 1px solid var(--line-soft);
+      color: var(--ink-soft);
+      letter-spacing: 0.08em;
+      background: rgba(244,238,227,0.42);
+    }
+
+    .empty-state.show { display: block; }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      place-items: center;
+      padding: 28px;
+      background: rgba(24, 21, 17, 0.62);
+      backdrop-filter: blur(12px);
+    }
+
+    .modal.is-open {
+      display: grid;
+      animation: fadeIn 0.28s ease both;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal-paper {
+      position: relative;
+      width: min(1180px, 100%);
+      max-height: min(92vh, 980px);
+      overflow: auto;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.46), transparent 34%),
+        var(--paper-light);
+      box-shadow: 0 40px 120px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.28);
+      padding: clamp(24px, 4vw, 56px);
+      animation: openPaper 0.48s var(--ease) both;
+    }
+
+    @keyframes openPaper {
+      from { opacity: 0; transform: translateY(30px) scale(0.94) rotate(-0.7deg); }
+      to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+    }
+
+    .close-button {
+      position: fixed;
+      top: 22px;
+      right: 24px;
+      width: 46px;
+      height: 46px;
+      border: 1px solid rgba(255,255,255,0.5);
+      background: rgba(245, 239, 228, 0.86);
+      color: var(--ink);
+      border-radius: 999px;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.26);
+    }
+
+    .modal-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      margin-bottom: 28px;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--ink-soft);
+      text-transform: uppercase;
+    }
+
+    .modal-title {
+      font-size: clamp(52px, 8vw, 124px);
+      line-height: 0.88;
+      font-weight: 400;
+      letter-spacing: -0.065em;
+      margin: 0 0 20px;
+    }
+
+    .modal-lead {
+      font-size: clamp(24px, 3vw, 42px);
+      line-height: 1.45;
+      font-weight: 400;
+      margin: 0 0 28px;
+      max-width: 900px;
+      color: var(--ink) !important;
+    }
+
+    .modal-layout {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 34px;
+      align-items: start;
+    }
+
+    .modal-photo {
+      min-height: 460px;
+      background-size: cover;
+      background-position: center;
+      filter: grayscale(0.38) sepia(0.18) contrast(0.9);
+      border: 1px solid rgba(37,35,31,0.16);
+    }
+
+    .modal-columns {
+      column-count: 2;
+      column-gap: 28px;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      margin-top: 20px;
+    }
+
+    .modal-columns p {
+      margin-bottom: 16px;
+      break-inside: avoid;
+    }
+
+    .modal-aside {
+      border-left: 1px solid var(--line);
+      padding-left: 26px;
+      position: sticky;
+      top: 0;
+    }
+
+    .aside-title {
+      font-size: 28px;
+      line-height: 1.1;
+      margin: 0 0 18px;
+      font-weight: 400;
+    }
+
+    .toc {
+      list-style: none;
+      padding: 0;
+      margin: 24px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .toc li {
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line-soft);
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .toc strong {
+      color: var(--ink);
+      font-weight: 400;
+    }
+
+    .check-list {
+      margin: 24px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px solid var(--line);
+      list-style: none;
+    }
+
+    .check-list li {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 10px;
+      padding: 9px 0;
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+
+    .check-list li::before { content: "□"; color: var(--ink); }
+
+    .related {
+      margin-top: 34px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .related h3 {
+      margin: 0 0 14px;
+      font-size: 24px;
+      font-weight: 400;
+    }
+
+    .related-mini {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .related-mini div {
+      border: 1px solid var(--line-soft);
+      padding: 14px;
+      min-height: 92px;
+      background: rgba(255,255,255,0.2);
+      font-size: 12px;
+      color: var(--ink-soft);
+    }
+
+    .related-mini strong {
+      display: block;
+      font-size: 18px;
+      color: var(--ink);
+      font-weight: 400;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+
+
+    .editor-desk {
+      position: relative;
+      margin-top: 54px;
+      padding: clamp(26px, 4vw, 54px);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.36), transparent 42%),
+        rgba(244,238,227,0.62);
+      box-shadow: 0 24px 70px rgba(26, 22, 18, 0.16);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .editor-desk::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, rgba(244,238,227,0.9) 0%, rgba(244,238,227,0.58) 44%, rgba(244,238,227,0.24) 100%),
+        url('https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1800&q=80');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.38;
+      filter: grayscale(0.52) sepia(0.18) contrast(0.9);
+      z-index: -2;
+      transform: scale(1.04);
+    }
+
+    .editor-desk::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-top: 1px solid rgba(37,35,31,0.18);
+      border-bottom: 1px solid rgba(37,35,31,0.18);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .desk-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 20px;
+      align-items: end;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      margin-bottom: 28px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .desk-title {
+      margin: 0 0 18px;
+      font-size: clamp(42px, 7vw, 104px);
+      line-height: 0.9;
+      font-weight: 400;
+      letter-spacing: -0.06em;
+    }
+
+    .desk-lead {
+      max-width: 680px;
+      margin: 0 0 30px;
+      color: var(--ink-soft);
+      font-size: 14px;
+      line-height: 1.9;
+    }
+
+    .desk-layout {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .desk-form,
+    .desk-paper {
+      border: 1px solid var(--line-soft);
+      background: rgba(250,247,239,0.44);
+      padding: 22px;
+      min-height: 360px;
+    }
+
+    .desk-field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .desk-field label {
+      color: var(--ink-soft);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .desk-field input,
+    .desk-field textarea,
+    .desk-field select {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(244,238,227,0.78);
+      color: var(--ink);
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.7;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .desk-field textarea {
+      min-height: 130px;
+      resize: vertical;
+    }
+
+    .desk-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .desk-paper {
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.42), transparent 38%),
+        var(--paper-light);
+      box-shadow: 0 20px 54px rgba(26,22,18,0.18);
+    }
+
+    .desk-paper-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 0;
+      color: var(--ink-soft);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .preview-title {
+      margin: 22px 0 12px;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 0.95;
+      font-weight: 400;
+      letter-spacing: -0.05em;
+    }
+
+    .preview-body {
+      column-count: 2;
+      column-gap: 24px;
+      border-top: 1px solid var(--line-soft);
+      padding-top: 18px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.85;
+      white-space: pre-wrap;
+    }
+
+    .preview-mood {
+      display: inline-block;
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      color: var(--ink-soft);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+
+
+    .about-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .about-card {
+      width: 100%;
+      border: 1px solid var(--line-soft);
+      background: rgba(244,238,227,0.58);
+      color: var(--ink);
+      font-family: inherit;
+      text-align: left;
+      padding: 16px;
+      cursor: pointer;
+      transition: background 0.25s ease, transform 0.25s var(--ease), border-color 0.25s ease;
+    }
+
+    .about-card:hover,
+    .about-card.active {
+      background: rgba(250,247,239,0.82);
+      border-color: var(--line);
+      transform: translateY(-2px);
+    }
+
+    .about-card-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid var(--line-soft);
+      padding-bottom: 9px;
+      margin-bottom: 10px;
+    }
+
+    .about-card-name {
+      font-size: 24px;
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+    }
+
+    .about-card-role {
+      color: var(--ink-soft);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .about-card p {
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .about-detail-meta {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+      border-top: 1px solid var(--line-soft);
+      padding-top: 18px;
+    }
+
+    .about-detail-meta div {
+      border: 1px solid var(--line-soft);
+      padding: 12px;
+      min-height: 78px;
+      background: rgba(255,255,255,0.18);
+      color: var(--ink-soft);
+      font-size: 11px;
+      line-height: 1.55;
+    }
+
+    .about-detail-meta strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--ink);
+      font-weight: 400;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .about-open-note {
+      margin-top: 18px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.8;
+      border-top: 1px solid var(--line-soft);
+      padding-top: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .about-detail-meta {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .desk-header,
+      .desk-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .preview-body {
+        column-count: 1;
+      }
+    }
+
+    @media (max-width: 1080px) {
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .paper-card.featured { grid-column: span 2; }
+      .toolbar { grid-template-columns: 1fr; }
+      .search-input { width: 100%; }
+    }
+
+    @media (max-width: 760px) {
+      .site-shell { width: min(100% - 24px, 680px); padding-top: 18px; }
+      .hero { grid-template-columns: 1fr; min-height: 380px; padding-top: 60px; }
+      .hero-copy { writing-mode: horizontal-tb; justify-self: start; max-height: none; }
+      .gallery { grid-template-columns: 1fr; }
+      .paper-card, .paper-card.featured { grid-column: auto; display: block; min-height: 590px; }
+      .paper-card.featured .main-photo { height: 250px; }
+      .modal { padding: 14px; }
+      .modal-paper { max-height: 92vh; }
+      .modal-layout { grid-template-columns: 1fr; }
+      .modal-photo { min-height: 300px; }
+      .modal-columns { column-count: 1; }
+      .modal-aside { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 24px; position: static; }
+      .related-mini { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 860px) {
+
+  body {
+
+    overflow-x: hidden;
+
+  }
+
+  .site-shell {
+
+    width: min(100% - 24px, 680px);
+
+    padding-top: 18px;
+
+    padding-bottom: 48px;
+
+  }
+
+  .ticker {
+
+    gap: 18px;
+
+    margin-bottom: 18px;
+
+    font-size: 10px;
+
+  }
+
+  .ticker-track {
+
+    gap: 32px;
+
+    animation-duration: 42s;
+
+  }
+
+  .hero {
+
+    grid-template-columns: 1fr;
+
+    min-height: 360px;
+
+    padding: 58px 0 34px;
+
+    gap: 24px;
+
+  }
+
+  .hero::before {
+
+    background-position: center;
+
+    opacity: 0.68;
+
+  }
+
+  h1 {
+
+    font-size: clamp(48px, 17vw, 88px);
+
+    line-height: 0.9;
+
+    letter-spacing: -0.06em;
+
+  }
+
+  .hero-copy {
+
+    writing-mode: horizontal-tb;
+
+    justify-self: start;
+
+    max-height: none;
+
+    max-width: 100%;
+
+    font-size: 13px;
+
+    line-height: 1.85;
+
+  }
+
+  .toolbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 35;
+
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+
+    padding: 12px 0;
+
+    margin-bottom: 18px;
+
+  }
+
+  .filters,
+
+  .modes {
+
+    display: flex;
+
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    gap: 8px;
+
+    padding-bottom: 4px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+
+  }
+
+  .filters::-webkit-scrollbar,
+
+  .modes::-webkit-scrollbar {
+
+    display: none;
+
+  }
+
+  .tool-button {
+
+    flex: 0 0 auto;
+
+    min-height: 40px;
+
+    padding: 10px 13px;
+
+    font-size: 10px;
+
+  }
+
+  .search-input {
+
+    width: 100%;
+
+    min-height: 42px;
+
+    font-size: 16px;
+
+  }
+
+  .gallery-note {
+
+    align-items: flex-start;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+  }
+
+  .gallery {
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+  }
+
+  .paper-card,
+
+  .paper-card.featured {
+
+    grid-column: auto;
+
+    display: block;
+
+    min-height: auto;
+
+    padding: 18px;
+
+  }
+
+  .paper-card:hover {
+
+    transform: none;
+
+  }
+
+  .paper-card.featured .paper-title,
+
+  .paper-title {
+
+    font-size: clamp(38px, 13vw, 58px);
+
+    line-height: 0.95;
+
+  }
+
+  .paper-subtitle {
+
+    font-size: 18px;
+
+    line-height: 1.5;
+
+  }
+
+  .main-photo,
+
+  .paper-card.featured .main-photo {
+
+    height: 230px;
+
+    margin: 16px 0;
+
+  }
+
+  .article-grid {
+
+    grid-template-columns: 1fr;
+
+    gap: 14px;
+
+    margin-bottom: 48px;
+
+  }
+
+  .mini-photo {
+
+    min-height: 150px;
+
+  }
+
+  .side-list div {
+
+    grid-template-columns: 36px 1fr;
+
+  }
+
+  .paper-bottomline {
+
+    position: static;
+
+    margin-top: 20px;
+
+  }
+
+  .read-label {
+
+    display: none;
+
+  }
+
+  .scrap-button {
+
+    top: 48px;
+
+    right: 16px;
+
+    font-size: 9px;
+
+    padding: 7px 8px;
+
+  }
+
+  .modal {
+
+    padding: 12px;
+
+    align-items: start;
+
+  }
+
+  .modal-paper {
+
+    width: 100%;
+
+    max-height: 92vh;
+
+    padding: 22px 18px;
+
+  }
+
+  .close-button {
+
+    top: 12px;
+
+    right: 12px;
+
+    width: 42px;
+
+    height: 42px;
+
+    font-size: 24px;
+
+    z-index: 120;
+
+  }
+
+  .modal-header {
+
+    grid-template-columns: 1fr;
+
+    gap: 6px;
+
+    font-size: 10px;
+
+    padding-right: 46px;
+
+  }
+
+  .modal-title {
+
+    font-size: clamp(44px, 15vw, 78px);
+
+    line-height: 0.92;
+
+  }
+
+  .modal-lead {
+
+    font-size: clamp(21px, 7vw, 34px);
+
+    line-height: 1.35;
+
+  }
+
+  .modal-layout {
+
+    grid-template-columns: 1fr;
+
+    gap: 24px;
+
+  }
+
+  .modal-photo {
+
+    min-height: 260px;
+
+  }
+
+  .modal-columns {
+
+    column-count: 1;
+
+    font-size: 13px;
+
+  }
+
+  .modal-aside {
+
+    position: static;
+
+    border-left: 0;
+
+    padding-left: 0;
+
+    border-top: 1px solid var(--line);
+
+    padding-top: 22px;
+
+  }
+
+  .related-mini {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .editor-desk {
+
+    margin-top: 38px;
+
+    padding: 24px 18px;
+
+  }
+
+  .desk-header {
+
+    grid-template-columns: 1fr;
+
+    gap: 6px;
+
+    font-size: 10px;
+
+  }
+
+  .desk-title {
+
+    font-size: clamp(44px, 15vw, 78px);
+
+    line-height: 0.9;
+
+  }
+
+  .desk-lead {
+
+    font-size: 13px;
+
+    line-height: 1.85;
+
+  }
+
+  .desk-layout {
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+  }
+
+  .desk-form,
+
+  .desk-paper {
+
+    min-height: auto;
+
+    padding: 18px;
+
+  }
+
+  .preview-title {
+
+    font-size: clamp(38px, 13vw, 64px);
+
+  }
+
+  .preview-body {
+
+    column-count: 1;
+
+    font-size: 13px;
+
+  }
+
+  .about-card-name {
+
+    font-size: 21px;
+
+  }
+
+  .about-card-top {
+
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+  }
+
+  .about-detail-meta {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
+
+@media (max-width: 430px) {
+
+  .site-shell {
+
+    width: min(100% - 18px, 430px);
+
+  }
+
+  .hero {
+
+    min-height: 330px;
+
+    padding-top: 48px;
+
+  }
+
+  h1 {
+
+    font-size: clamp(42px, 18vw, 70px);
+
+  }
+
+  .paper-card,
+
+  .paper-card.featured {
+
+    padding: 16px;
+
+  }
+
+  .paper-topline,
+
+  .paper-bottomline {
+
+    font-size: 9px;
+
+    letter-spacing: 0.12em;
+
+  }
+
+  .main-photo,
+
+  .paper-card.featured .main-photo {
+
+    height: 200px;
+
+  }
+
+  .modal-paper {
+
+    padding: 20px 15px;
+
+  }
+
+  .modal-photo {
+
+    min-height: 220px;
+
+  }
+
+  .editor-desk {
+
+    padding: 22px 15px;
+
+  }
+
+}
+
+@media (max-width: 760px) {
+
+  .toolbar {
+
+    position: static;
+
+    display: block;
+
+    padding: 8px 0 12px;
+
+    margin-bottom: 16px;
+
+    background: transparent;
+
+    border-bottom: 1px solid var(--line-soft);
+
+    backdrop-filter: none;
+
+  }
+
+  .filters {
+
+    display: flex;
+
+    flex-wrap: nowrap;
+
+    overflow-x: auto;
+
+    gap: 8px;
+
+    padding: 0 0 8px;
+
+    -webkit-overflow-scrolling: touch;
+
+    scrollbar-width: none;
+
+  }
+
+  .filters::-webkit-scrollbar {
+
+    display: none;
+
+  }
+
+  .filters .tool-button {
+
+    flex: 0 0 auto;
+
+    min-height: 36px;
+
+    padding: 9px 13px;
+
+    font-size: 10px;
+
+    letter-spacing: 0.14em;
+
+  }
+
+  .search-input,
+
+  .modes {
+
+    display: none;
+
+  }
+
+}
+  </style>
+</head>
+<body>
+<div aria-hidden="true" class="loader">
+<div class="loader-mark"><strong>Ten Hues</strong>EDITORIAL NEWSPAPER ARCHIVE</div>
+</div>
+<main class="site-shell">
+<div class="ticker">
+<span class="ticker-label">TODAY'S NOTE</span>
+<div class="ticker-track">
+<span>大正大学 二年次</span>
+<span>地域創生学科の学びを、新聞のようにめくる</span>
+<span>地域課題実践論</span>
+<span>高橋若木先生監修</span>
+<span>地域創生学科の学びを、新聞のようにめくる</span>
+<span>Created by 105</span>
+</div>
+</div>
+<section class="hero">
+<div>
+<div class="hero-kicker">Taisho University Regional Creation Magazine</div>
+<h1>Forest of Ten Hues</h1>
+</div>
+<p class="hero-copy">大正大学地域創生学科がおくる、地域と学生をつなぐ新聞ギャラリー。</p>
+</section>
+<section aria-label="新聞ギャラリー操作" class="toolbar">
+<div class="filters">
+<button class="tool-button active" data-filter="all">All</button>
+<button class="tool-button" data-filter="journal">Journal</button>
+<button class="tool-button" data-filter="travel">Travel</button>
+<button class="tool-button" data-filter="art">Art</button>
+<button class="tool-button" data-filter="routine">Routine</button>
+<button class="tool-button" data-filter="scrap">Scrap</button>
+</div>
+<input class="search-input" id="searchInput" placeholder="Search papers..." type="search"/>
+<div class="modes">
+<button class="tool-button active" data-mode="paper">Paper</button>
+<button class="tool-button" data-mode="clean">Clean</button>
+<button class="tool-button" data-mode="old">Old Print</button>
+</div>
+</section>
+<div class="gallery-note">
+<span id="resultText">記事を選んで読んでください</span>
+<span>VOL. 01 / 2026</span>
+</div>
+<section class="gallery" id="gallery"><article class="paper-card featured" data-aside="地域課題解決実践論Ⅰ" data-body="この記事では、二年生から履修できる地域課題解決実践論Ⅰについて紹介します。この授業は、私たちが所属する高橋若木先生班と、高柳直弥先生班の二つに分かれて活動しています。
+
+高橋班では、地域創生学科のまだ知られていない魅力を発信する広報誌「十色の森」の制作と、山形県にある惺山高校の探究授業のチューターとして高校生を支援する活動を、同時進行で行っています。複数の班が動く中で、役割や進捗を全員が共有し、理解できるようにすることの大切さを学びました。今後は月刊での発行を続け、読者の皆さんにとって魅力ある誌面づくりを目指します。
+
+高柳班では、大正大学が運営するガモールマルシェの一角を借りて、豊島区の規格外となった果物や野菜を安く仕入れ、スムージーとして販売しています。この活動は、SDGsの推進と豊島区の特産品のPRを目的としたものです。仕入れ、試作、デザイン、販売までを学生主体で行っており、スケジュール管理の難しさもありながら、お互いの得意分野を生かして活動を進めています。
+
+今後も月に一度、新作のスムージーを販売していく予定です。ガモール堂スムージーの営業日時は、土日、祝日を除く11時00分から16時30分です。ぜひ足を運んでみてください。" data-category="journal" data-date="Main Feature" data-id="title01" data-image="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 01" data-subtitle="地域課題解決実践論Ⅰで進む、二つの学生プロジェクト" data-title="プロジェクトで挑む課題解決"><button class="scrap-button" type="button">SCRAP</button><div><div class="paper-topline"><span>PROJECT</span><span>No. 01</span></div><h2 class="paper-title">プロジェクトで挑む課題解決</h2><h3 class="paper-subtitle">地域課題解決実践論Ⅰで進む、二つの学生プロジェクト</h3><p>二年生から履修できる地域課題解決実践論Ⅰでは、広報誌「十色の森」の制作や高校生の探究支援、規格外野菜・果物を活かしたスムージー販売など、学生主体の活動が進められています。</p><div class="side-list"><div><strong>01</strong><span>高橋班：「十色の森」制作と高校生の探究支援</span></div><div><strong>02</strong><span>高柳班：規格外野菜・果物を活かしたスムージー販売</span></div><div><strong>03</strong><span>学生主体で企画・制作・運営まで進める実践型の授業</span></div></div></div><div><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Key Note<br/>高橋班と高柳班、それぞれの活動から、学生が主体となって地域課題に向き合う姿が見えてきます。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>PROJECT SOLUTION</span><span>PAGE 01</span></div></article>
+<article class="paper-card" data-aside="フィールドワーク方法論Ⅰ" data-body="地域創生学科一年のフィールドワーク方法論Ⅰでは、実践的な活動の第一歩として、ゴールデンウィークに各自でフィールドワークを行います。テーマは学生それぞれが設定し、実際に現地へ足を運んで調査します。
+
+昨年の一例として、都市の緑地化をテーマに、品川区にある「かなめのもりのビル」で調査を行いました。このビルは、都市緑地化・屋上緑地化の先進的な事例であり、ビル全体に苗木を植えることで、自然の力を活かした水害の抑制や環境負荷の軽減を目指しています。
+
+見学会とツアーに参加し、建設過程や緑地化によってもたらされる恩恵について調査しました。現地で見て、聞いて、考えることで、ほかの建物ではどのように緑地化を実現できるのかを考えるきっかけになりました。" data-category="travel" data-date="Field Work" data-id="title02" data-image="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 02" data-subtitle="一年生のフィールドワークから始まる実践的な学び" data-title="地域と出会う最初の一歩"><button class="scrap-button" type="button">SCRAP</button><div class="paper-topline"><span>FIELD</span><span>No. 02</span></div><h2 class="paper-title">地域と出会う最初の一歩</h2><h3 class="paper-subtitle">一年生のフィールドワークから始まる実践的な学び</h3><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Field Note<br/>現地で見て、聞いて、考えることが、地域を理解する最初の一歩になります。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>FIRST STEP</span><span>PAGE 02</span></div></article>
+<article class="paper-card" data-aside="地域創生学科の魅力" data-body="地域創生学科の魅力は、一年生から地域実習やフィールドワークに参加でき、実際に地域の方々と関わりながら学べることです。実習では、地域の課題や魅力について自分たちで考え、グループで意見を出し合いながら活動を進めます。
+
+キャンパス内だけではなく、現地に足を運んで学ぶことで、コミュニケーション力や協働力を身につけることができます。また、先生や先輩との距離も近く、相談しやすい雰囲気があるため、安心して挑戦できます。
+
+実際に行動しながら学べる経験が多く、地域に属していない人でも、その場所について深く知ることができる学科です。さらに、実習を通して地域の方とのつながりが生まれ、自分自身の成長も実感することができます。" data-category="journal" data-date="Department Note" data-id="title03" data-image="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 03" data-subtitle="現地で学び、地域の人々と関わりながら成長する学科" data-title="教室を飛び出し、地域へ"><button class="scrap-button" type="button">SCRAP</button><div class="paper-topline"><span>STUDY</span><span>No. 03</span></div><h2 class="paper-title">教室を飛び出し、地域へ</h2><h3 class="paper-subtitle">現地で学び、地域の人々と関わりながら成長する学科</h3><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Campus to Local<br/>地域の人と関わる実践的な学びが、コミュニケーション力や協働力の成長につながります。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>LOCAL LEARNING</span><span>PAGE 03</span></div></article>
+<article class="paper-card" data-aside="学生インタビュー" data-body="今回お話を伺った永田大翔さんは、MIPEE！という学生団体に所属しています。MIPEE！は、学生の「ワクワク」を原動力に、さまざまな地域とつながりながら活動している団体です。
+
+永田さんは、もともと地元である山梨県のぶどうや桃などの農業風景が好きで、農業に関わりたいという思いを持っていました。学生が農業と関わる機会が少ない中で、農家さんと対等な関係を築きたいと考えるようになったそうです。
+
+その後、大学でMIPEE！代表の遠藤光大さんと出会い、「人と繋がって面白いことをしたい」という思いに共感し、運営として活動を始めました。MIPEE！の中で農業に関する活動を行う百姓企画では、現在、地域の方や大学生と一緒に栃木県で米作りにも取り組んでいます。
+
+活動を通して、実習以外で地域と関わるきっかけを他の学生へ届けられていることに、やりがいを感じているそうです。農家さんと学生をただつなげるだけではなく、対等で一緒にワクワクできる関わり方を大切にしたいと話していました。今後は、現在の活動や興味を山梨県で実践していくことが目標です。" data-category="travel" data-date="Interview" data-id="title04" data-image="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 04" data-subtitle="MIPEE！で地域と学生をつなぐ、永田大翔さんの活動" data-title="次はあなたで広がる人の輪"><button class="scrap-button" type="button">SCRAP</button><div class="paper-topline"><span>INTERVIEW</span><span>No. 04</span></div><h2 class="paper-title">次はあなたで広がる人の輪</h2><h3 class="paper-subtitle">MIPEE！で地域と学生をつなぐ、永田大翔さんの活動</h3><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Interview Note<br/>農家さんと学生が対等につながり、一緒にワクワクできる関係づくりを大切にしています。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>MIPEE! STORY</span><span>PAGE 04</span></div></article>
+<article class="paper-card" data-aside="十色の森について" data-body="学科広報誌「十色の森」は、地域創生学科の外部活動を行う学生の紹介や、地域のイベント情報など、地創に関するさまざまな話題を月に一度お届けする広報誌です。
+
+学生が主体となり、企画、デザイン、取材、執筆、写真撮影、データ管理までを行っています。誌面づくりを通して、地域で活動する学生の姿や、学科の中だけでは見えにくい魅力を伝えることを目指しています。
+
+「十色の森」が、学生と地域を結ぶ一つのツールとなれるように、これからも読者に届く誌面づくりに取り組んでいきます。ぜひ今後の発行にもご期待ください。" data-category="art" data-date="Magazine" data-id="title05" data-image="https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 05" data-subtitle="学科広報誌「十色の森」が届ける、地域創生学科のいま" data-title="地域と学生を繋ぐ森"><button class="scrap-button" type="button">SCRAP</button><div class="paper-topline"><span>MAGAZINE</span><span>No. 05</span></div><h2 class="paper-title">地域と学生を繋ぐ森</h2><h3 class="paper-subtitle">学科広報誌「十色の森」が届ける、地域創生学科のいま</h3><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1513519245088-0e12902e35ca?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Editorial Note<br/>十色の森は、学生の視点から地域創生学科の活動や地域の情報を届ける広報誌です。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>TEN HUES</span><span>PAGE 05</span></div></article>
+<article class="paper-card" data-aside="あとがき" data-body="今回のページでは、地域課題解決実践論Ⅰ、フィールドワーク、地域創生学科の魅力、学生インタビュー、そして学科広報誌「十色の森」について紹介しました。
+
+どの記事にも共通しているのは、学生が自分たちで考え、現地に足を運び、人と関わりながら学んでいるということです。教室の中だけでは得られない経験が、地域創生学科の学びを形づくっています。
+
+「十色の森」という名前のように、地域との関わり方や学生の活動には、それぞれ違った色があります。このサイトが、その一つひとつの色に触れるきっかけになればうれしいです。" data-category="routine" data-date="Afterword" data-id="title06" data-image="https://images.unsplash.com/photo-1518733057094-95b53143d2a7?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 06" data-subtitle="十色の森から、読んでくれたあなたへ" data-title="編集後記"><button class="scrap-button" type="button">SCRAP</button><div class="paper-topline"><span>AFTERWORD</span><span>No. 06</span></div><h2 class="paper-title">編集後記</h2><h3 class="paper-subtitle">十色の森から、読んでくれたあなたへ</h3><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Afterword<br/>それぞれの記事が、地域と学生のつながりを少しずつ照らしています。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>THANK YOU</span><span>PAGE 06</span></div></article>
+</section>
+<div class="empty-state" id="emptyState">NO PAPERS FOUND / 条件に合う紙面がありません</div>
+<section class="editor-desk" id="aboutUs">
+<div class="desk-header">
+<span>FINAL PAGE / ABOUT US</span>
+<span>CLICK A NAME TO READ</span>
+</div>
+<h2 class="desk-title">私たちについて</h2>
+<p class="desk-lead">このページでは、サイトを制作した人、誌面を一緒につくる人、支えてくれた人、読みに来てくれた人への紹介をまとめています。記事だけでは見えにくい、制作の背景や感謝の気持ちを残すための小さな紙面です。</p>
+<div class="desk-layout">
+<div aria-label="紹介する人の一覧" class="desk-form about-list">
+<button class="about-card active" data-person="me" type="button">
+<span class="about-card-top">
+<span class="about-card-name">105</span>
+<span class="about-card-role">Creator</span>
+</span>
+<p>サイトの構成とデザインを担当しました。</p>
+</button>
+<button class="about-card" data-person="guide" type="button">
+<span class="about-card-top">
+<span class="about-card-name">十色の森編集チーム</span>
+<span class="about-card-role">Editorial</span>
+</span>
+<p>企画・取材・執筆を通して誌面を形にする学生たち。</p>
+</button>
+<button class="about-card" data-person="friend" type="button">
+<span class="about-card-top">
+<span class="about-card-name">協力してくれた人</span>
+<span class="about-card-role">Support</span>
+</span>
+<p>写真、文章、感想、アイデアなどで作品の空気を一緒につくってくれた人たち。</p>
+</button>
+<button class="about-card" data-person="visitor" type="button">
+<span class="about-card-top">
+<span class="about-card-name">見に来てくれた人</span>
+<span class="about-card-role">Reader</span>
+</span>
+<p>このページを読んで、地域創生学科の活動に触れてくれた人たち。</p>
+</button>
+</div>
+<article aria-label="選択した人の紹介" aria-live="polite" class="desk-paper">
+<div class="desk-paper-top">
+<span>Forest of Ten Hues</span>
+<span id="aboutRole">Creator</span>
+</div>
+<h3 class="preview-title" id="aboutName">105</h3>
+<div class="preview-body" id="aboutBody">Forest of Ten Hues を作っている人です。</div>
+<span class="preview-mood" id="aboutTag">SITE CREATOR</span>
+<div class="about-detail-meta">
+<div><strong>Like</strong><span id="aboutLike">ばなな</span></div>
+<div><strong>Work</strong><span id="aboutWork">デザイン / 文章 / サイト制作</span></div>
+<div><strong>Message</strong><span id="aboutMessage">ゆっくり見ていってください。</span></div>
+</div>
+<p class="about-open-note">制作に関わった人や、この紙面を支えてくれた人たちを紹介しています。記事とあわせて、十色の森をつくる人の雰囲気も感じてもらえたらうれしいです。</p>
+</article>
+</div>
+</section>
+</main>
+<section aria-hidden="true" class="modal" id="modal">
+<button aria-label="閉じる" class="close-button" id="closeButton">×</button>
+<article aria-labelledby="modalTitle" aria-modal="true" class="modal-paper" role="dialog">
+<div class="modal-header"><span id="modalDate">Saturday, May 18, 2026</span><span id="modalIssue">Vol. 01 / No. 18</span></div>
+<h2 class="modal-title" id="modalTitle">Aurelia Times</h2>
+<p class="modal-lead" id="modalSubtitle">美しい一日は、静かな朝から。</p>
+<div class="modal-layout">
+<div>
+<div class="modal-photo" id="modalPhoto"></div>
+<div class="modal-columns" id="modalBody"><p>紙面を開くと、記事の本文がここに表示されます。各記事の内容に合わせて、読みやすい段落に整えています。</p><p>一覧では短く、開いた紙面では詳しく読めるようにしているため、気になる見出しから順番に読んでみてください。</p><p>地域創生学科の学びや学生の活動が、新聞の紙面のように少しずつ広がっていく構成です。</p></div>
+<section class="related">
+<h3>Related Papers</h3>
+<div class="related-mini"><div><strong>地域と出会う最初の一歩</strong>一年生のフィールドワーク</div><div><strong>教室を飛び出し、地域へ</strong>実践的な学科の魅力</div><div><strong>地域と学生を繋ぐ森</strong>十色の森の紹介</div></div>
+</section>
+</div>
+<aside class="modal-aside">
+<h3 class="aside-title" id="modalAside">記事の使い方メモ</h3>
+<p>この記事で注目したいポイントをまとめています。本文とあわせて読むことで、授業や活動の背景、地域とのつながりがより分かりやすくなります。</p>
+<ul class="toc">
+<li><strong>01</strong><span>記事の概要</span></li>
+<li><strong>02</strong><span>活動の背景</span></li>
+<li><strong>03</strong><span>学びと気づき</span></li>
+<li><strong>04</strong><span>次につながる視点</span></li>
+</ul>
+<ul class="check-list">
+<li>学生主体の活動に注目する</li>
+<li>地域との関わり方を見る</li>
+<li>現地で学ぶ意味を考える</li>
+<li>人とのつながりを読む</li>
+<li>十色の森全体の流れを感じる</li>
+</ul>
+</aside>
+</div>
+</article>
+</section>
+<script>
+    const modal = document.getElementById('modal');
+    const closeButton = document.getElementById('closeButton');
+    const modalDate = document.getElementById('modalDate');
+    const modalIssue = document.getElementById('modalIssue');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalSubtitle = document.getElementById('modalSubtitle');
+    const modalPhoto = document.getElementById('modalPhoto');
+    const modalAside = document.getElementById('modalAside');
+    const modalBody = document.getElementById('modalBody');
+    const cards = [...document.querySelectorAll('.paper-card')];
+    const filterButtons = [...document.querySelectorAll('[data-filter]')];
+    const modeButtons = [...document.querySelectorAll('[data-mode]')];
+    const searchInput = document.getElementById('searchInput');
+    const emptyState = document.getElementById('emptyState');
+    const resultText = document.getElementById('resultText');
+
+    let currentFilter = 'all';
+    const saved = new Set(JSON.parse(localStorage.getItem('quiet-days-scraps') || '[]'));
+
+    function syncScrapButtons() {
+      cards.forEach(card => {
+        const button = card.querySelector('.scrap-button');
+        const isSaved = saved.has(card.dataset.id);
+        button.classList.toggle('saved', isSaved);
+        button.textContent = isSaved ? 'SAVED' : 'SCRAP';
+      });
+    }
+
+    function saveScraps() {
+      localStorage.setItem('quiet-days-scraps', JSON.stringify([...saved]));
+    }
+
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+      let count = 0;
+
+      cards.forEach(card => {
+        const text = `${card.dataset.title} ${card.dataset.subtitle} ${card.dataset.category}`.toLowerCase();
+        const categoryMatch = currentFilter === 'all' || card.dataset.category === currentFilter || (currentFilter === 'scrap' && saved.has(card.dataset.id));
+        const searchMatch = !query || text.includes(query);
+        const show = categoryMatch && searchMatch;
+        card.classList.toggle('hidden', !show);
+        if (show) count++;
+      });
+
+      emptyState.classList.toggle('show', count === 0);
+      resultText.textContent = count === 0 ? 'NO PAPERS FOUND' : `${count} PAPERS / SELECT TO READ`;
+    }
+
+    function openModal(card) {
+      modalDate.textContent = card.dataset.date;
+      modalIssue.textContent = card.dataset.issue;
+      modalTitle.textContent = card.dataset.title;
+      modalSubtitle.textContent = card.dataset.subtitle;
+      modalAside.textContent = card.dataset.aside;
+      modalPhoto.style.backgroundImage = `url('${card.dataset.image}')`;
+      if (modalBody && card.dataset.body) {
+        modalBody.innerHTML = card.dataset.body
+          .split(/\n\s*\n|\|\|/)
+          .map(paragraph => paragraph.trim())
+          .filter(Boolean)
+          .map(paragraph => `<p>${paragraph}</p>`)
+          .join('');
+      }
+      modal.classList.add('is-open');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('is-open');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    cards.forEach(card => {
+      card.addEventListener('click', () => openModal(card));
+      const scrapButton = card.querySelector('.scrap-button');
+      scrapButton.addEventListener('click', event => {
+        event.stopPropagation();
+        const id = card.dataset.id;
+        saved.has(id) ? saved.delete(id) : saved.add(id);
+        saveScraps();
+        syncScrapButtons();
+        applyFilters();
+      });
+    });
+
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        filterButtons.forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        currentFilter = button.dataset.filter;
+        applyFilters();
+      });
+    });
+
+    modeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        modeButtons.forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        document.body.classList.remove('clean-mode', 'old-mode');
+        if (button.dataset.mode === 'clean') document.body.classList.add('clean-mode');
+        if (button.dataset.mode === 'old') document.body.classList.add('old-mode');
+      });
+    });
+
+    searchInput.addEventListener('input', applyFilters);
+    closeButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
+    window.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+
+    syncScrapButtons();
+    applyFilters();
+
+    const aboutCards = [...document.querySelectorAll('.about-card')];
+    const aboutRole = document.getElementById('aboutRole');
+    const aboutName = document.getElementById('aboutName');
+    const aboutBody = document.getElementById('aboutBody');
+    const aboutTag = document.getElementById('aboutTag');
+    const aboutLike = document.getElementById('aboutLike');
+    const aboutWork = document.getElementById('aboutWork');
+    const aboutMessage = document.getElementById('aboutMessage');
+
+    const people = {
+      me: {
+        name: '105',
+        role: 'Creator',
+        tag: 'SITE CREATOR',
+        body: 'このサイトを制作した人です。新聞風の見た目で、地域創生学科の活動が少しでも読みやすく伝わるようにまとめました。',
+        like: '新聞風デザイン / 地域の学び',
+        work: 'デザイン / 文章 / サイト制作',
+        message: '気になる見出しから、ゆっくり読んでみてください。'
+      },
+      guide: {
+        name: '十色の森',
+        role: 'Magazine',
+        tag: 'TEN HUES',
+        body: '地域創生学科の外部活動や地域イベント、学生の声を届ける学科広報誌です。学生が主体となって制作しています。',
+        like: '地域 / 学生 / 発信',
+        work: '企画 / 取材 / 執筆 / デザイン',
+        message: '学生と地域を結ぶ紙面を目指しています。'
+      },
+      friend: {
+        name: '制作メンバー',
+        role: 'Support',
+        tag: 'SPECIAL THANKS',
+        body: '企画、取材、執筆、写真撮影、データ管理など、それぞれの役割を持って紙面づくりに関わる人たちです。',
+        like: '感想 / アイデア / 写真 / ことば',
+        work: '協力 / 相談 / フィードバック',
+        message: '一人ひとりの視点が、紙面の色になります。'
+      },
+      visitor: {
+        name: '見に来てくれた人',
+        role: 'Reader',
+        tag: 'DEAR READER',
+        body: '監修してくださる先生や、紙面を読んでくれる皆さんの存在が、活動を続けていく力になっています。',
+        like: '地域 / 学生 / 発信',
+        work: '読む / 見守る / 広げる',
+        message: '読んでくれてありがとうございます。'
+      }
+    };
+
+    function showPerson(key) {
+      const person = people[key] || people.me;
+      aboutRole.textContent = person.role;
+      aboutName.textContent = person.name;
+      aboutBody.textContent = person.body;
+      aboutTag.textContent = person.tag;
+      aboutLike.textContent = person.like;
+      aboutWork.textContent = person.work;
+      aboutMessage.textContent = person.message;
+
+      aboutCards.forEach(card => {
+        card.classList.toggle('active', card.dataset.person === key);
+      });
+    }
+
+    aboutCards.forEach(card => {
+      card.addEventListener('click', () => showPerson(card.dataset.person));
+    });
+
+    showPerson('me');
+
+  </script>
+</body>
+</html>
