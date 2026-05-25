@@ -129,11 +129,25 @@
       color: var(--ink);
     }
 
+    .ticker-marquee {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+    }
+
     .ticker-track {
       display: flex;
-      gap: 42px;
+      width: max-content;
       white-space: nowrap;
       animation: tickerMove 34s linear infinite;
+      will-change: transform;
+    }
+
+    .ticker-group {
+      display: flex;
+      gap: 42px;
+      padding-right: 42px;
+      flex: 0 0 auto;
     }
 
     @keyframes tickerMove {
@@ -676,6 +690,182 @@
       margin-bottom: 8px;
     }
 
+    .front-page-pick {
+      position: relative;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr auto;
+      gap: 22px;
+      align-items: center;
+      margin: 0 0 28px;
+      padding: 18px 20px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background:
+        linear-gradient(90deg, rgba(250,247,239,0.56), rgba(244,238,227,0.26)),
+        rgba(244,238,227,0.38);
+      box-shadow: 0 14px 38px rgba(26, 22, 18, 0.08);
+      overflow: hidden;
+    }
+
+    .front-page-pick::before {
+      content: "";
+      position: absolute;
+      inset: 10px 0;
+      border-top: 1px solid var(--line-soft);
+      border-bottom: 1px solid var(--line-soft);
+      pointer-events: none;
+    }
+
+    .front-kicker {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .front-title {
+      margin-top: 8px;
+      font-size: clamp(28px, 4vw, 54px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      color: var(--ink);
+    }
+
+    .front-copy {
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .front-meta {
+      display: block;
+      margin-top: 8px;
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .front-open {
+      position: relative;
+      z-index: 1;
+      white-space: nowrap;
+    }
+
+    .scrapbook {
+      margin-top: 54px;
+      padding: clamp(24px, 4vw, 48px);
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.32), transparent 40%),
+        rgba(244,238,227,0.48);
+      box-shadow: 0 22px 62px rgba(26, 22, 18, 0.13);
+    }
+
+    .scrapbook-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 0;
+      margin-bottom: 24px;
+      color: var(--ink-soft);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .scrapbook-title {
+      margin: 0 0 16px;
+      font-size: clamp(38px, 6vw, 86px);
+      line-height: 0.9;
+      font-weight: 400;
+      letter-spacing: -0.06em;
+    }
+
+    .scrapbook-lead {
+      max-width: 680px;
+      margin: 0 0 24px;
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.9;
+    }
+
+    .scrapbook-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .scrap-note {
+      position: relative;
+      min-height: 150px;
+      padding: 18px;
+      border: 1px solid var(--line-soft);
+      background: var(--paper-light);
+      box-shadow: 0 16px 34px rgba(26,22,18,0.13);
+      cursor: pointer;
+      transform: rotate(-0.3deg);
+      font-family: inherit;
+      text-align: left;
+      color: inherit;
+      transition: transform .25s var(--ease), box-shadow .25s ease;
+    }
+
+    .scrap-note:nth-child(even) { transform: rotate(0.45deg); }
+    .scrap-note:hover { transform: translateY(-4px) rotate(0deg); box-shadow: 0 22px 48px rgba(26,22,18,0.18); }
+
+    .scrap-note::before {
+      content: "";
+      position: absolute;
+      width: 54px;
+      height: 18px;
+      top: -9px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-2deg);
+      background: rgba(232,225,211,0.78);
+      border: 1px solid rgba(37,35,31,0.08);
+      box-shadow: 0 3px 8px rgba(26,22,18,0.08);
+    }
+
+    .scrap-note small {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--ink-soft);
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .scrap-note strong {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--ink);
+      font-size: 28px;
+      line-height: 0.98;
+      font-weight: 400;
+      letter-spacing: -0.04em;
+    }
+
+    .scrap-note span {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .scrapbook-empty {
+      padding: 34px 20px;
+      text-align: center;
+      border: 1px dashed var(--line);
+      color: var(--ink-soft);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      background: rgba(250,247,239,0.28);
+    }
 
 
     .editor-desk {
@@ -1018,11 +1208,24 @@
 
   .ticker-track {
 
-    gap: 32px;
-
     animation-duration: 42s;
 
   }
+
+  .ticker-marquee {
+
+    flex: 1;
+
+  }
+
+  .ticker-group {
+
+    gap: 32px;
+
+    padding-right: 32px;
+
+  }
+
 
   .hero {
 
@@ -1581,6 +1784,34 @@
   }
 
 }
+
+    @media (max-width: 860px) {
+      .front-page-pick {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 16px;
+      }
+
+      .front-open {
+        width: fit-content;
+      }
+
+      .scrapbook {
+        margin-top: 38px;
+        padding: 24px 18px;
+      }
+
+      .scrapbook-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .scrapbook-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -1590,13 +1821,25 @@
 <main class="site-shell">
 <div class="ticker">
 <span class="ticker-label">TODAY'S NOTE</span>
+<div aria-hidden="true" class="ticker-marquee">
 <div class="ticker-track">
+<div class="ticker-group">
 <span>大正大学 二年次</span>
-<span>地域創生学科の学びを、新聞のようにめくる</span>
+<span>SELECT A PAPER / READ THE STORY / SCRAP YOUR FAVORITES</span>
 <span>地域課題実践論</span>
 <span>高橋若木先生監修</span>
-<span>地域創生学科の学びを、新聞のようにめくる</span>
+<span>SELECT A PAPER / READ THE STORY / SCRAP YOUR FAVORITES</span>
 <span>Created by 105</span>
+</div>
+<div class="ticker-group">
+<span>大正大学 二年次</span>
+<span>SELECT A PAPER / READ THE STORY / SCRAP YOUR FAVORITES</span>
+<span>地域課題実践論</span>
+<span>高橋若木先生監修</span>
+<span>SELECT A PAPER / READ THE STORY / SCRAP YOUR FAVORITES</span>
+<span>Created by 105</span>
+</div>
+</div>
 </div>
 </div>
 <section class="hero">
@@ -1605,6 +1848,14 @@
 <h1>Forest of Ten Hues</h1>
 </div>
 <p class="hero-copy">大正大学地域創生学科がおくる、地域と学生をつなぐ新聞ギャラリー。</p>
+</section>
+<section aria-label="本日の一面" class="front-page-pick">
+<div>
+<div class="front-kicker">TODAY'S FRONT PAGE</div>
+<div class="front-title" id="frontTitle">Title</div>
+</div>
+<p class="front-copy"><span id="frontSubtitle">今日おすすめの紙面を選んでいます。</span><span class="front-meta" id="frontMeta">VOL. 01</span></p>
+<button class="tool-button front-open" id="frontOpenButton" type="button">Open Front Page</button>
 </section>
 <section aria-label="新聞ギャラリー操作" class="toolbar">
 <div class="filters">
@@ -1623,8 +1874,8 @@
 </div>
 </section>
 <div class="gallery-note">
-<span id="resultText">記事を選んで読んでください</span>
-<span>VOL. 01 / 2026</span>
+記事を選んで読んでください
+VOL. 01 / 2026
 </div>
 <section class="gallery" id="gallery"><article class="paper-card featured" data-aside="地域課題解決実践論Ⅰ" data-body="この記事では、二年生から履修できる地域課題解決実践論Ⅰについて紹介します。この授業は、私たちが所属する高橋若木先生班と、高柳直弥先生班の二つに分かれて活動しています。
 
@@ -1662,6 +1913,16 @@
 「十色の森」という名前のように、地域との関わり方や学生の活動には、それぞれ違った色があります。このサイトが、その一つひとつの色に触れるきっかけになればうれしいです。" data-category="routine" data-date="Afterword" data-id="title06" data-image="https://images.unsplash.com/photo-1518733057094-95b53143d2a7?auto=format&amp;fit=crop&amp;w=1400&amp;q=80" data-issue="No. 06" data-subtitle="十色の森から、読んでくれたあなたへ" data-title="編集後記"><button class="scrap-button" type="button">SCRAP</button><div class="paper-topline"><span>AFTERWORD</span><span>No. 06</span></div><h2 class="paper-title">編集後記</h2><h3 class="paper-subtitle">十色の森から、読んでくれたあなたへ</h3><div class="main-photo" style="background-image:url('https://images.unsplash.com/photo-1518733057094-95b53143d2a7?auto=format&amp;fit=crop&amp;w=1400&amp;q=80')"></div><div class="article-grid"><p>Afterword<br/>それぞれの記事が、地域と学生のつながりを少しずつ照らしています。</p><div class="mini-photo" style="background-image:url('https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&amp;fit=crop&amp;w=900&amp;q=80')"></div></div><span class="read-label">OPEN PAPER</span><div class="paper-bottomline"><span>THANK YOU</span><span>PAGE 06</span></div></article>
 </section>
 <div class="empty-state" id="emptyState">NO PAPERS FOUND / 条件に合う紙面がありません</div>
+<section class="scrapbook" id="scrapbook">
+<div class="scrapbook-header">
+<span>SCRAPBOOK / SAVED PAPERS</span>
+<span id="scrapbookCount">0 CLIPS</span>
+</div>
+<h2 class="scrapbook-title">Scrapbook</h2>
+<p class="scrapbook-lead">SCRAPした紙面だけが、切り抜きのようにここへ集まります。気になる記事を保存していくと、自分だけの小さな新聞束になります。</p>
+<div class="scrapbook-grid" id="scrapbookGrid"></div>
+<div class="scrapbook-empty" id="scrapbookEmpty">NO SCRAPS YET / 気になる紙面の SCRAP を押すとここに集まります</div>
+</section>
 <section class="editor-desk" id="aboutUs">
 <div class="desk-header">
 <span>FINAL PAGE / ABOUT US</span>
@@ -1713,7 +1974,7 @@
 <div><strong>Work</strong><span id="aboutWork">デザイン / 文章 / サイト制作</span></div>
 <div><strong>Message</strong><span id="aboutMessage">ゆっくり見ていってください。</span></div>
 </div>
-<p class="about-open-note">制作に関わった人や、この紙面を支えてくれた人たちを紹介しています。記事とあわせて、十色の森をつくる人の雰囲気も感じてもらえたらうれしいです。</p>
+<p class="about-open-note">左のカードをクリックすると、この紹介紙面だけが切り替わります。人数を増やしたいときは、左のカードと JavaScript の <code>people</code> に同じキーで追加すると増やせます。</p>
 </article>
 </div>
 </section>
@@ -1727,27 +1988,27 @@
 <div class="modal-layout">
 <div>
 <div class="modal-photo" id="modalPhoto"></div>
-<div class="modal-columns" id="modalBody"><p>紙面を開くと、記事の本文がここに表示されます。各記事の内容に合わせて、読みやすい段落に整えています。</p><p>一覧では短く、開いた紙面では詳しく読めるようにしているため、気になる見出しから順番に読んでみてください。</p><p>地域創生学科の学びや学生の活動が、新聞の紙面のように少しずつ広がっていく構成です。</p></div>
+<div class="modal-columns" id="modalBody"><p>ここは紙面をクリックしたときに開く本文エリアです。本文は複数段落で入れると新聞らしく見えます。</p><p>目安は短めの記事なら250〜450字、しっかり読ませる記事なら500〜800字くらいです。長くする場合は段落を分けると読みやすくなります。</p><p>画像の下に本文が2段組で入るため、文章を詰めすぎず、100〜160字くらいで段落を切るのがおすすめです。</p></div>
 <section class="related">
 <h3>Related Papers</h3>
-<div class="related-mini"><div><strong>地域と出会う最初の一歩</strong>一年生のフィールドワーク</div><div><strong>教室を飛び出し、地域へ</strong>実践的な学科の魅力</div><div><strong>地域と学生を繋ぐ森</strong>十色の森の紹介</div></div>
+<div class="related-mini"><div><strong>Title 2</strong>写真中心の記事</div><div><strong>Title 3</strong>体験紹介の記事</div><div><strong>Title 6</strong>まとめ・あとがき</div></div>
 </section>
 </div>
 <aside class="modal-aside">
 <h3 class="aside-title" id="modalAside">記事の使い方メモ</h3>
-<p>この記事で注目したいポイントをまとめています。本文とあわせて読むことで、授業や活動の背景、地域とのつながりがより分かりやすくなります。</p>
+<p>紙面の横に置く小さなコラムです。プロフィール、制作日記、作品メモ、ニュース、店舗紹介などを入れると、新聞らしさが一気に増します。</p>
 <ul class="toc">
-<li><strong>01</strong><span>記事の概要</span></li>
-<li><strong>02</strong><span>活動の背景</span></li>
-<li><strong>03</strong><span>学びと気づき</span></li>
-<li><strong>04</strong><span>次につながる視点</span></li>
+<li><strong>01</strong><span>Main Story</span></li>
+<li><strong>02</strong><span>Photo Note</span></li>
+<li><strong>03</strong><span>Small Column</span></li>
+<li><strong>04</strong><span>Related Papers</span></li>
 </ul>
 <ul class="check-list">
-<li>学生主体の活動に注目する</li>
-<li>地域との関わり方を見る</li>
-<li>現地で学ぶ意味を考える</li>
-<li>人とのつながりを読む</li>
-<li>十色の森全体の流れを感じる</li>
+<li>大きな写真をひとつ置く</li>
+<li>見出しは細く上品にする</li>
+<li>文章量は詰めすぎない</li>
+<li>日付や号数で新聞感を出す</li>
+<li>余白を怖がらずに残す</li>
 </ul>
 </aside>
 </div>
@@ -1769,8 +2030,18 @@
     const searchInput = document.getElementById('searchInput');
     const emptyState = document.getElementById('emptyState');
     const resultText = document.getElementById('resultText');
+    const tickerLabel = document.querySelector('.ticker-label');
+    const tickerGroups = [...document.querySelectorAll('.ticker-group')];
+    const frontTitle = document.getElementById('frontTitle');
+    const frontSubtitle = document.getElementById('frontSubtitle');
+    const frontMeta = document.getElementById('frontMeta');
+    const frontOpenButton = document.getElementById('frontOpenButton');
+    const scrapbookGrid = document.getElementById('scrapbookGrid');
+    const scrapbookEmpty = document.getElementById('scrapbookEmpty');
+    const scrapbookCount = document.getElementById('scrapbookCount');
 
     let currentFilter = 'all';
+    let frontPageCard = null;
     const saved = new Set(JSON.parse(localStorage.getItem('quiet-days-scraps') || '[]'));
 
     function syncScrapButtons() {
@@ -1784,6 +2055,47 @@
 
     function saveScraps() {
       localStorage.setItem('quiet-days-scraps', JSON.stringify([...saved]));
+    }
+
+    function setTicker(label, items) {
+      if (!tickerLabel || tickerGroups.length === 0) return;
+      tickerLabel.textContent = label;
+      const html = items.map(item => `<span>${item}</span>`).join('');
+      tickerGroups.forEach(group => { group.innerHTML = html; });
+    }
+
+    function updateTickerForState(count) {
+      const activeFilter = currentFilter.toUpperCase();
+      const base = currentFilter === 'all'
+        ? ['大正大学 二年次', 'SELECT A PAPER / READ THE STORY / SCRAP YOUR FAVORITES', '地域課題実践論', '高橋若木先生監修', 'Created by 105']
+        : [`${activeFilter} PAPERS ONLY`, `${count} PAPERS IN VIEW`, 'READ THE STORY / SCRAP YOUR FAVORITES', 'Forest of Ten Hues', 'VOL. 01 / 2026'];
+      setTicker(currentFilter === 'all' ? "TODAY'S NOTE" : 'FILTER NOTE', base);
+    }
+
+    function setupFrontPage() {
+      if (!frontTitle || cards.length === 0) return;
+      const today = new Date();
+      const daySeed = Math.floor(today.getTime() / 86400000);
+      frontPageCard = cards[daySeed % cards.length];
+      frontTitle.textContent = frontPageCard.dataset.title;
+      frontSubtitle.textContent = frontPageCard.dataset.subtitle;
+      frontMeta.textContent = `${frontPageCard.dataset.date} / ${frontPageCard.dataset.issue}`;
+    }
+
+    function renderScrapbook() {
+      if (!scrapbookGrid) return;
+      const savedCards = cards.filter(card => saved.has(card.dataset.id));
+      scrapbookGrid.innerHTML = '';
+      scrapbookCount.textContent = `${savedCards.length} CLIPS`;
+      scrapbookEmpty.style.display = savedCards.length ? 'none' : 'block';
+      savedCards.forEach(card => {
+        const note = document.createElement('button');
+        note.type = 'button';
+        note.className = 'scrap-note';
+        note.innerHTML = `<small>${card.dataset.category} / ${card.dataset.issue}</small><strong>${card.dataset.title}</strong><span>${card.dataset.subtitle}</span>`;
+        note.addEventListener('click', () => openModal(card));
+        scrapbookGrid.appendChild(note);
+      });
     }
 
     function applyFilters() {
@@ -1801,6 +2113,7 @@
 
       emptyState.classList.toggle('show', count === 0);
       resultText.textContent = count === 0 ? 'NO PAPERS FOUND' : `${count} PAPERS / SELECT TO READ`;
+      updateTickerForState(count);
     }
 
     function openModal(card) {
@@ -1812,10 +2125,10 @@
       modalPhoto.style.backgroundImage = `url('${card.dataset.image}')`;
       if (modalBody && card.dataset.body) {
         modalBody.innerHTML = card.dataset.body
-          .split(/\n\s*\n|\|\|/)
-          .map(paragraph => paragraph.trim())
+          .split('。')
+          .map(sentence => sentence.trim())
           .filter(Boolean)
-          .map(paragraph => `<p>${paragraph}</p>`)
+          .map(sentence => `<p>${sentence}。</p>`)
           .join('');
       }
       modal.classList.add('is-open');
@@ -1838,6 +2151,7 @@
         saved.has(id) ? saved.delete(id) : saved.add(id);
         saveScraps();
         syncScrapButtons();
+        renderScrapbook();
         applyFilters();
       });
     });
@@ -1862,11 +2176,14 @@
     });
 
     searchInput.addEventListener('input', applyFilters);
+    if (frontOpenButton) frontOpenButton.addEventListener('click', () => { if (frontPageCard) openModal(frontPageCard); });
     closeButton.addEventListener('click', closeModal);
     modal.addEventListener('click', event => { if (event.target === modal) closeModal(); });
     window.addEventListener('keydown', event => { if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
 
+    setupFrontPage();
     syncScrapButtons();
+    renderScrapbook();
     applyFilters();
 
     const aboutCards = [...document.querySelectorAll('.about-card')];
@@ -1883,37 +2200,37 @@
         name: '105',
         role: 'Creator',
         tag: 'SITE CREATOR',
-        body: 'このサイトを制作した人です。新聞風の見た目で、地域創生学科の活動が少しでも読みやすく伝わるようにまとめました。',
-        like: '新聞風デザイン / 地域の学び',
+        body: 'Forest of Ten Hues を作っている人です。',
+        like: 'ばなな',
         work: 'デザイン / 文章 / サイト制作',
-        message: '気になる見出しから、ゆっくり読んでみてください。'
+        message: 'ゆっくり見ていってください。'
       },
       guide: {
-        name: '十色の森',
-        role: 'Magazine',
-        tag: 'TEN HUES',
-        body: '地域創生学科の外部活動や地域イベント、学生の声を届ける学科広報誌です。学生が主体となって制作しています。',
-        like: '地域 / 学生 / 発信',
-        work: '企画 / 取材 / 執筆 / デザイン',
-        message: '学生と地域を結ぶ紙面を目指しています。'
+        name: '誌面アイデア',
+        role: 'Idea',
+        tag: 'Sub creator',
+        body: '説明です',
+        like: 'なにかしら',
+        work: 'アイデア出し',
+        message: '気になる見出しから開いてみてください。'
       },
       friend: {
-        name: '制作メンバー',
+        name: 'だれか',
         role: 'Support',
         tag: 'SPECIAL THANKS',
-        body: '企画、取材、執筆、写真撮影、データ管理など、それぞれの役割を持って紙面づくりに関わる人たちです。',
-        like: '感想 / アイデア / 写真 / ことば',
+        body: '紹介したい人',
+        like: '感想、アイデア、写真、ことば',
         work: '協力 / 相談 / フィードバック',
-        message: '一人ひとりの視点が、紙面の色になります。'
+        message: 'うぼぁ'
       },
       visitor: {
         name: '見に来てくれた人',
         role: 'Reader',
         tag: 'DEAR READER',
-        body: '監修してくださる先生や、紙面を読んでくれる皆さんの存在が、活動を続けていく力になっています。',
-        like: '地域 / 学生 / 発信',
-        work: '読む / 見守る / 広げる',
-        message: '読んでくれてありがとうございます。'
+        body: 'もぺ',
+        like: 'なにかしら',
+        work: '読む / 見つける / 持ち帰る',
+        message: 'もちょ'
       }
     };
 
@@ -1938,6 +2255,5 @@
 
     showPerson('me');
 
-  </script>
-</body>
+  </script></body>
 </html>
